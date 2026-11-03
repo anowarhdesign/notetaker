@@ -1,5 +1,7 @@
 # Murmur — notes that listen
 
+**Live:** https://murmur-notetaker.vercel.app
+
 An AI meeting notepad. Jot the few things that matter while Murmur transcribes the room; when the meeting ends, one click weaves your notes and the conversation into a crisp summary with decisions, follow-ups and open questions.
 
 ## Features
