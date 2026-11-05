@@ -1,4 +1,4 @@
-import { FileText, House, Mic, Moon, PlayCircle, Plus, Search, Settings2 } from 'lucide-react'
+import { FileText, House, ListChecks, Mic, NotebookText, Moon, PlayCircle, Plus, Search, Settings2 } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { useMeetings } from '../store'
 
@@ -38,6 +38,8 @@ export function CommandPalette({
       { id: 'listen', label: 'New note & start listening', icon: <Mic size={15} />, run: () => onStart('mic') },
       { id: 'demo', label: 'Play a demo call', icon: <PlayCircle size={15} />, run: () => onStart('demo') },
       { id: 'home', label: 'Go home', icon: <House size={15} />, run: () => go('#/') },
+      { id: 'notes', label: 'All notes', icon: <NotebookText size={15} />, run: () => go('#/notes') },
+      { id: 'follow-ups', label: 'Follow-ups', icon: <ListChecks size={15} />, run: () => go('#/follow-ups') },
       { id: 'theme', label: 'Toggle light / dark', icon: <Moon size={15} />, run: onTheme },
       { id: 'settings', label: 'Settings & Claude key', icon: <Settings2 size={15} />, run: onSettings },
     ]

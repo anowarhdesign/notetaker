@@ -75,6 +75,14 @@ export const actions = {
   appendSegment(id: string, seg: Segment) {
     actions.update(id, (m) => ({ transcript: [...m.transcript, seg] }))
   },
+  toggleAction(id: string, actionId: string) {
+    actions.update(id, (x) => ({
+      enhanced: x.enhanced && {
+        ...x.enhanced,
+        actionItems: x.enhanced.actionItems.map((a) => (a.id === actionId ? { ...a, done: !a.done } : a)),
+      },
+    }))
+  },
   remove(id: string) {
     meetings = meetings.filter((m) => m.id !== id)
     emit()

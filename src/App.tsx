@@ -1,8 +1,10 @@
 import { Menu } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { CommandPalette } from './components/CommandPalette'
+import { FollowUpsPage } from './components/FollowUpsPage'
 import { Home } from './components/Home'
 import { NoteView } from './components/NoteView'
+import { NotesPage } from './components/NotesPage'
 import { SettingsModal } from './components/SettingsModal'
 import { Sidebar } from './components/Sidebar'
 import { Toaster } from './components/Toast'
@@ -10,11 +12,14 @@ import { startSession } from './lib/recorder'
 import { actions, setSettings, useSettings } from './store'
 import type { TemplateId } from './types'
 
-type Route = { view: 'home' } | { view: 'note'; id: string }
+export type Route = { view: 'home' } | { view: 'notes' } | { view: 'follow-ups' } | { view: 'note'; id: string }
 
 const parse = (): Route => {
   const m = location.hash.match(/^#\/n\/([\w-]+)/)
-  return m ? { view: 'note', id: m[1]! } : { view: 'home' }
+  if (m) return { view: 'note', id: m[1]! }
+  if (location.hash.startsWith('#/notes')) return { view: 'notes' }
+  if (location.hash.startsWith('#/follow-ups')) return { view: 'follow-ups' }
+  return { view: 'home' }
 }
 
 export default function App() {
@@ -106,7 +111,9 @@ export default function App() {
         go={go}
       />
       <main className="main">
-        {route.view === 'home' ? (
+        {route.view === 'note' ? (
+          <NoteView key={route.id} id={route.id} go={go} onMenu={() => setNav(true)} />
+        ) : (
           <>
             <div className="mobile-bar only-mobile">
               <button className="icon-btn" onClick={() => setNav(true)} aria-label="Open menu">
@@ -114,10 +121,10 @@ export default function App() {
               </button>
               <span className="brand-word">murmur</span>
             </div>
-            <Home go={go} onStart={startNew} />
+            {route.view === 'home' && <Home go={go} onStart={startNew} />}
+            {route.view === 'notes' && <NotesPage go={go} onNew={() => newNote()} />}
+            {route.view === 'follow-ups' && <FollowUpsPage go={go} />}
           </>
-        ) : (
-          <NoteView key={route.id} id={route.id} go={go} onMenu={() => setNav(true)} />
         )}
       </main>
       {palette && (

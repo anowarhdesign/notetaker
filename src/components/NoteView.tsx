@@ -43,7 +43,7 @@ export function NoteView({ id, go, onMenu }: { id: string; go: (h: string) => vo
   const [working, setWorking] = useState<number | null>(null)
   const [menu, setMenu] = useState(false)
   const [attendee, setAttendee] = useState('')
-  const titleRef = useRef<HTMLInputElement>(null)
+  const titleRef = useRef<HTMLTextAreaElement>(null)
   const notesRef = useRef<HTMLTextAreaElement>(null)
 
   const live = rec.meetingId === id && rec.status !== 'idle'
@@ -56,6 +56,14 @@ export function NoteView({ id, go, onMenu }: { id: string; go: (h: string) => vo
   useEffect(() => {
     if (live) setPanel((p) => p ?? 'transcript')
   }, [live])
+
+  // let long titles wrap instead of scrolling sideways
+  useEffect(() => {
+    const el = titleRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = el.scrollHeight + 'px'
+  }, [m?.title])
 
   // autosize the notes textarea
   useEffect(() => {
@@ -226,13 +234,19 @@ export function NoteView({ id, go, onMenu }: { id: string; go: (h: string) => vo
         </div>
 
         <div className="page">
-          <input
+          <textarea
             ref={titleRef}
             className="title-input"
+            rows={1}
             value={m.title}
             placeholder="Untitled meeting"
-            onChange={(e) => actions.update(id, { title: e.target.value })}
-            onKeyDown={(e) => e.key === 'Enter' && notesRef.current?.focus()}
+            onChange={(e) => actions.update(id, { title: e.target.value.replace(/\n/g, ' ') })}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                notesRef.current?.focus()
+              }
+            }}
             aria-label="Meeting title"
           />
 
@@ -398,8 +412,9 @@ export function NoteView({ id, go, onMenu }: { id: string; go: (h: string) => vo
                   <span>{m.transcript.length ? 'Resume listening' : 'Start listening'}</span>
                   <Mic size={15} />
                 </button>
-                <button className="icon-btn" onClick={() => start('demo')} title="Play a demo conversation" aria-label="Play demo conversation">
-                  <PlayCircle size={18} />
+                <button className="dock-demo" onClick={() => start('demo')} title="Play a scripted demo conversation">
+                  <PlayCircle size={16} />
+                  <span>Demo</span>
                 </button>
                 <span className="dock-div" />
                 <button className="btn btn-ember enh-btn" onClick={() => void enhance()} disabled={working !== null}>

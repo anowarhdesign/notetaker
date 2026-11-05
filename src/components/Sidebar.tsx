@@ -1,12 +1,13 @@
-import { Command, House, Plus, Settings2, Sparkles, X } from 'lucide-react'
+import { Command, House, ListChecks, NotebookText, Plus, Settings2, Sparkles, X } from 'lucide-react'
 import { useMemo } from 'react'
 import { useRecorder } from '../lib/recorder'
 import { clock } from '../lib/util'
 import { useMeetings, useSettings } from '../store'
+import type { Route } from '../App'
 import { Orb } from './Orb'
 
 interface Props {
-  route: { view: 'home' } | { view: 'note'; id: string }
+  route: Route
   open: boolean
   onClose: () => void
   onNew: () => void
@@ -19,8 +20,12 @@ export function Sidebar({ route, open, onClose, onNew, onSettings, onPalette, go
   const meetings = useMeetings()
   const rec = useRecorder()
   const settings = useSettings()
-  const recent = useMemo(() => [...meetings].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 12), [meetings])
+  const recent = useMemo(() => [...meetings].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 8), [meetings])
   const activeId = route.view === 'note' ? route.id : null
+  const openCount = useMemo(
+    () => meetings.reduce((n, m) => n + (m.enhanced?.actionItems.filter((a) => !a.done).length ?? 0), 0),
+    [meetings],
+  )
   const isMac = /Mac|iPhone|iPad/.test(navigator.platform)
 
   return (
@@ -50,8 +55,28 @@ export function Sidebar({ route, open, onClose, onNew, onSettings, onPalette, go
         </button>
 
         <nav className="nav">
-          <button className={`nav-item ${route.view === 'home' ? 'active' : ''}`} onClick={() => go('#/')}>
+          <button
+            className={`nav-item ${route.view === 'home' ? 'active' : ''}`}
+            aria-current={route.view === 'home' ? 'page' : undefined}
+            onClick={() => go('#/')}
+          >
             <House size={16} /> Home
+          </button>
+          <button
+            className={`nav-item ${route.view === 'notes' ? 'active' : ''}`}
+            aria-current={route.view === 'notes' ? 'page' : undefined}
+            onClick={() => go('#/notes')}
+          >
+            <NotebookText size={16} /> All notes
+            <span className="nav-count">{meetings.length}</span>
+          </button>
+          <button
+            className={`nav-item ${route.view === 'follow-ups' ? 'active' : ''}`}
+            aria-current={route.view === 'follow-ups' ? 'page' : undefined}
+            onClick={() => go('#/follow-ups')}
+          >
+            <ListChecks size={16} /> Follow-ups
+            {openCount > 0 && <span className="nav-count">{openCount}</span>}
           </button>
         </nav>
 
@@ -71,6 +96,7 @@ export function Sidebar({ route, open, onClose, onNew, onSettings, onPalette, go
             <button
               key={m.id}
               className={`recent-item ${activeId === m.id ? 'active' : ''}`}
+              aria-current={activeId === m.id ? 'page' : undefined}
               onClick={() => go(`#/n/${m.id}`)}
               title={m.title || 'Untitled'}
             >
