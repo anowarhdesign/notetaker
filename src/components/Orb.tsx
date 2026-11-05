@@ -2,8 +2,9 @@ import { useEffect, useRef } from 'react'
 import { level } from '../lib/recorder'
 
 /**
- * The signature element: a soft, living blob. Idle it breathes; while
- * listening it is pushed outward by the live frequency spectrum.
+ * The signature element: a little red-pen waveform. Idle it breathes; while
+ * listening each bar follows a slice of the live frequency spectrum.
+ * (Kept the name `Orb` so call sites stay the same.)
  */
 export function Orb({ size = 44, active = false, paused = false }: { size?: number; active?: boolean; paused?: boolean }) {
   const ref = useRef<HTMLCanvasElement>(null)
@@ -17,56 +18,32 @@ export function Orb({ size = 44, active = false, paused = false }: { size?: numb
     const ctx = cv.getContext('2d')!
     ctx.scale(dpr, dpr)
     const css = getComputedStyle(cv)
-    const ember = css.getPropertyValue('--ember').trim() || '#ef5b2b'
-    const ember2 = css.getPropertyValue('--ember-2').trim() || '#ffb38a'
+    const pen = css.getPropertyValue('--ember').trim() || '#c63b2a'
+    const muted = css.getPropertyValue('--ink-3').trim() || '#5b5f6b'
+    const bars = size >= 100 ? 9 : size >= 60 ? 7 : 5
+    const gap = size / (bars * 2.4)
+    const w = Math.max(2, (size * 0.72 - gap * (bars - 1)) / bars)
+    const x0 = (size - (w * bars + gap * (bars - 1))) / 2
+    const smooth = new Array<number>(bars).fill(0)
     let raf = 0
-    let smooth = 0
-    const N = 48
+
     const draw = (time: number) => {
       const t = time / 1000
-      const target = active && !paused ? level.value : 0
-      smooth += (target - smooth) * 0.15
+      const live = active && !paused
       ctx.clearRect(0, 0, size, size)
-      const cx = size / 2
-      const cy = size / 2
-      const R = size * 0.3
-
-      // halo
-      const halo = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, size / 2)
-      halo.addColorStop(0, ember + (active ? '55' : '22'))
-      halo.addColorStop(1, ember + '00')
-      ctx.fillStyle = halo
-      ctx.beginPath()
-      ctx.arc(cx, cy, size / 2, 0, Math.PI * 2)
-      ctx.fill()
-
-      // blob
-      ctx.beginPath()
-      for (let i = 0; i <= N; i++) {
-        const a = (i / N) * Math.PI * 2
-        const bin = level.bins[Math.floor((Math.abs(Math.sin(a * 1.5)) * level.bins.length) / 2)] ?? 0
-        const breathe = Math.sin(t * 1.6 + a * 3) * 0.04 + Math.sin(t * 0.9 - a * 2) * 0.03
-        const push = active && !paused ? (bin / 255) * 0.32 * (0.4 + smooth) : 0
-        const r = R * (1 + breathe + push + smooth * 0.12)
-        const x = cx + Math.cos(a) * r
-        const y = cy + Math.sin(a) * r
-        if (i === 0) ctx.moveTo(x, y)
-        else ctx.lineTo(x, y)
+      ctx.fillStyle = paused ? muted : pen
+      for (let i = 0; i < bars; i++) {
+        const bin = level.bins[Math.floor(((i + 1) / (bars + 1)) * (level.bins.length * 0.6))] ?? 0
+        const idle = 0.22 + Math.sin(t * 2.1 + i * 0.9) * 0.08 + Math.sin(t * 1.3 - i * 1.7) * 0.05
+        const target = live ? Math.max(idle, Math.min(1, (bin / 255) * 1.2 + level.value * 0.4)) : paused ? 0.18 : idle
+        smooth[i] = smooth[i]! + (target - smooth[i]!) * 0.2
+        const h = Math.max(w, size * 0.82 * smooth[i]!)
+        const x = x0 + i * (w + gap)
+        const y = (size - h) / 2
+        ctx.beginPath()
+        ctx.roundRect(x, y, w, h, w / 2)
+        ctx.fill()
       }
-      ctx.closePath()
-      const g = ctx.createRadialGradient(cx - R * 0.35, cy - R * 0.4, R * 0.1, cx, cy, R * 1.3)
-      g.addColorStop(0, ember2)
-      g.addColorStop(0.55, ember)
-      g.addColorStop(1, ember)
-      ctx.fillStyle = paused ? css.getPropertyValue('--ink-3').trim() || '#8a857c' : g
-      ctx.fill()
-
-      // glint
-      ctx.beginPath()
-      ctx.ellipse(cx - R * 0.32, cy - R * 0.38, R * 0.22, R * 0.12, -0.6, 0, Math.PI * 2)
-      ctx.fillStyle = 'rgba(255,255,255,0.35)'
-      ctx.fill()
-
       raf = requestAnimationFrame(draw)
     }
     raf = requestAnimationFrame(draw)

@@ -41,7 +41,7 @@ export default function App() {
     const apply = () => {
       const dark = settings.theme === 'dark' || (settings.theme === 'system' && mq.matches)
       root.dataset.theme = dark ? 'dark' : 'light'
-      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#14120f' : '#f3efe6')
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#121418' : '#e9e5da')
     }
     apply()
     mq.addEventListener('change', apply)

@@ -6,7 +6,7 @@ An AI meeting notepad. Jot the few things that matter while Murmur transcribes t
 
 ## Features
 
-- **Live transcription** in the browser (Web Speech API — Chrome, Edge, Safari), with an audio-reactive orb, pause/resume, and 10+ languages.
+- **Live transcription** in the browser (Web Speech API — Chrome, Edge, Safari), with an audio-reactive waveform, pause/resume, and 10+ languages.
 - **Your notes stay the backbone.** Enhanced notes keep every line you wrote (in ink) and expand it with what was actually said (in graphite), Granola-style.
 - **Two engines.** A private on-device summariser works offline with no key. Add an Anthropic API key in Settings to use Claude (Opus 5.5, Sonnet 5.5 or Haiku 5.5) for abstractive summaries and answers.
 - **Templates** — General, 1:1, Standup, Customer call, Interview — shape the sections.
