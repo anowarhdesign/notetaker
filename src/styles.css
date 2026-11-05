@@ -2155,7 +2155,7 @@ kbd {
 .nav-item.active,
 .recent-item.active {
   background: var(--card);
-  box-shadow: inset 4px 0 0 var(--accent), var(--shadow-1);
+  box-shadow: 0 1px 0 var(--line), 0 4px 10px -6px rgba(60, 50, 20, 0.35);
   font-weight: 800;
 }
 .recent-item {
@@ -2171,7 +2171,7 @@ kbd {
   box-shadow: inset 4px 0 0 var(--tab-4);
 }
 .recent-item.active {
-  box-shadow: inset 4px 0 0 var(--accent), var(--shadow-1);
+  background-color: var(--card);
 }
 .recent {
   display: flex;
@@ -2548,8 +2548,8 @@ h2.group-label {
   text-align: center;
 }
 .nav-item.active .nav-count {
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--paper);
+  color: var(--ink);
 }
 .fu-list {
   display: flex;
