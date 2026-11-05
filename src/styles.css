@@ -2936,6 +2936,35 @@ body::before {
   font-size: 21px;
 }
 
+/* template picker: custom chevron with room on the right */
+.select-meta {
+  position: relative;
+}
+.select-meta select {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 30px;
+  padding: 0 32px 0 12px;
+  background-color: var(--card);
+  background-image: none;
+}
+.select-meta select:hover {
+  border-color: var(--ink-3);
+}
+.select-meta::after {
+  content: '';
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -5px;
+  border-right: 1.75px solid var(--ink-2);
+  border-bottom: 1.75px solid var(--ink-2);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
 /* ---------- responsive ---------- */
 @media (max-width: 1180px) {
   .home-grid {
