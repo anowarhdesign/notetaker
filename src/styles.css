@@ -2158,6 +2158,9 @@ kbd {
   box-shadow: 0 1px 0 var(--line), 0 4px 10px -6px rgba(60, 50, 20, 0.35);
   font-weight: 800;
 }
+.nav-item {
+  border-radius: 10px;
+}
 .recent-item {
   box-shadow: inset 4px 0 0 var(--tab-1);
 }
@@ -2713,12 +2716,14 @@ body::before {
 .main {
   background-color: var(--card);
   background-image:
+    linear-gradient(var(--margin), var(--margin)),
     radial-gradient(circle at 26px 120px, var(--paper) 0 7px, var(--hole-ring) 7.5px, transparent 9px),
     var(--tex-grain),
     var(--tex-fibre),
     radial-gradient(var(--dots) 0.8px, transparent 1px);
-  background-size: 52px 260px, 220px 220px, 400px 400px, 28px 28px;
-  background-repeat: repeat-y, repeat, repeat, repeat;
+  background-size: 2px 100%, 52px 260px, 220px 220px, 400px 400px, 28px 28px;
+  background-position: 52px 0, 0 0, 0 0, 0 0, 0 0;
+  background-repeat: no-repeat, repeat-y, repeat, repeat, repeat;
   box-shadow:
     inset 0 0 70px var(--edge-shade),
     0 1px 0 rgba(60, 50, 20, 0.12),
@@ -2731,10 +2736,46 @@ body::before {
     0 1px 0 #000,
     0 16px 32px -8px rgba(0, 0, 0, 0.6);
 }
-/* margin line: a touch of ink bleed */
+/* the margin line is painted into the sheet's background (above) so it stays put while the page scrolls */
 .main::before {
-  box-shadow: 0 0 1px var(--margin);
-  opacity: 0.85;
+  display: none;
+}
+
+/* ---------- scrolling: the desk stays still, only the sheet's content moves ---------- */
+.app {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+.sidebar {
+  height: 100vh;
+  height: 100dvh;
+}
+.main {
+  height: calc(100vh - 36px);
+  height: calc(100dvh - 36px);
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+.note-layout {
+  min-height: 100%;
+}
+.panel {
+  height: calc(100vh - 36px);
+  height: calc(100dvh - 36px);
+}
+/* the note's top bar is a solid strip of the same paper, pinned to the sheet's top edge */
+.topbar {
+  background-color: var(--card);
+  background-image: var(--tex-grain);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 6px 6px 0 0;
 }
 
 /* masking tape */
@@ -3139,6 +3180,42 @@ body::before {
   }
   .main {
     overflow-x: clip;
+  }
+}
+
+/* phones: the sheet fills the screen and scrolls inside it */
+@media (max-width: 900px) {
+  .main {
+    height: 100vh;
+    height: 100dvh;
+    background-image: linear-gradient(var(--margin), var(--margin)), var(--tex-grain), var(--tex-fibre), radial-gradient(var(--dots) 0.8px, transparent 1px);
+    background-size: 2px 100%, 220px 220px, 400px 400px, 28px 28px;
+    background-position: 26px 0, 0 0, 0 0, 0 0;
+    background-repeat: no-repeat, repeat, repeat, repeat;
+  }
+  .topbar {
+    border-radius: 0;
+  }
+  .panel {
+    height: 72vh;
+  }
+}
+
+@media (max-width: 900px) {
+  .note-meta {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+  .note-meta > span {
+    white-space: nowrap;
+  }
+  .mobile-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--card);
+    background-image: var(--tex-grain);
+    border-bottom: 1px dashed var(--line);
   }
 }
 

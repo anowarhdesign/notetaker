@@ -34,7 +34,7 @@ export default function App() {
     const on = () => {
       setRoute(parse())
       setNav(false)
-      window.scrollTo({ top: 0 })
+      document.querySelector('.main')?.scrollTo({ top: 0 })
     }
     window.addEventListener('hashchange', on)
     return () => window.removeEventListener('hashchange', on)
