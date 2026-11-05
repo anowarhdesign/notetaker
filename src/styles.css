@@ -25,7 +25,7 @@
   --sticky: #fff7c2;
   --sticky-2: #f6d860;
   --margin: #f0a7a0;
-  --dots: #d6d2c4;
+  --dots: #ebe7dc;
   --tab-1: #f6d860;
   --tab-2: #b9d7c4;
   --tab-3: #f3b6a6;
@@ -70,7 +70,7 @@
   --sticky: #39331d;
   --sticky-2: #6a5a1c;
   --margin: #6b3a36;
-  --dots: #30343c;
+  --dots: #24272e;
   --tab-1: #5e5120;
   --tab-2: #284636;
   --tab-3: #5a2f27;
@@ -1983,8 +1983,8 @@ body::before {
 }
 .dotted {
   background-color: var(--card);
-  background-image: radial-gradient(var(--dots) 1px, transparent 1.2px);
-  background-size: 22px 22px;
+  background-image: radial-gradient(var(--dots) 0.8px, transparent 1px);
+  background-size: 28px 28px;
 }
 ::selection {
   background: var(--accent-soft);
@@ -2003,8 +2003,8 @@ kbd {
   margin: 18px 18px 18px 0;
   border-radius: 6px;
   background-color: var(--card);
-  background-image: radial-gradient(var(--dots) 1px, transparent 1.2px);
-  background-size: 22px 22px;
+  background-image: radial-gradient(var(--dots) 0.8px, transparent 1px);
+  background-size: 28px 28px;
   background-attachment: local;
   box-shadow: var(--shadow-2);
   min-height: calc(100vh - 36px);
