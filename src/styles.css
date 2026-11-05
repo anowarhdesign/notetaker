@@ -2669,6 +2669,199 @@ textarea.title-input {
   }
 }
 
+/* ==========================================================================
+   Real-world texture
+   All drawn with CSS and inline SVG noise (no image files): a linen desk,
+   paper grain and punched holes on the sheet, masking tape on cards,
+   sticky notes that curl, and a ruled index card.
+   ========================================================================== */
+:root {
+  --tex-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .27 0 0 0 0 .18 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --tex-fibre: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .35' numOctaves='2' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .35 0 0 0 0 .25 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  --tex-linen-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .015' numOctaves='2' seed='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .26 0 0 0 0 .18 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
+  --tex-linen-b: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.015 .9' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .26 0 0 0 0 .18 0 0 0 .14 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
+  --tape: rgba(236, 226, 196, 0.78);
+  --tape-edge: rgba(150, 130, 80, 0.18);
+  --hole-ring: rgba(70, 55, 25, 0.28);
+  --edge-shade: rgba(120, 95, 45, 0.07);
+  --index-rule: #c9d6ee;
+  --index-head: #e9a39a;
+}
+:root[data-theme='dark'] {
+  --tex-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .035 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --tex-fibre: none;
+  --tex-linen-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .015' numOctaves='2' seed='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
+  --tex-linen-b: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.015 .9' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
+  --tape: rgba(200, 190, 160, 0.22);
+  --tape-edge: rgba(255, 255, 255, 0.08);
+  --hole-ring: rgba(0, 0, 0, 0.6);
+  --edge-shade: rgba(0, 0, 0, 0.25);
+  --index-rule: #2c3a55;
+  --index-head: #6b3a36;
+}
+
+/* the desk: woven linen */
+body {
+  background-color: var(--paper);
+  background-image: var(--tex-linen-a), var(--tex-linen-b);
+}
+body::before {
+  opacity: 0.1;
+}
+
+/* the sheet: punched holes, grain, fibres, dots, darker edges */
+.main {
+  background-color: var(--card);
+  background-image:
+    radial-gradient(circle at 26px 120px, var(--paper) 0 7px, var(--hole-ring) 7.5px, transparent 9px),
+    var(--tex-grain),
+    var(--tex-fibre),
+    radial-gradient(var(--dots) 0.8px, transparent 1px);
+  background-size: 52px 260px, 220px 220px, 400px 400px, 28px 28px;
+  background-repeat: repeat-y, repeat, repeat, repeat;
+  box-shadow:
+    inset 0 0 70px var(--edge-shade),
+    0 1px 0 rgba(60, 50, 20, 0.12),
+    0 2px 2px rgba(60, 50, 20, 0.06),
+    0 16px 32px -8px rgba(60, 50, 20, 0.22);
+}
+:root[data-theme='dark'] .main {
+  box-shadow:
+    inset 0 0 70px var(--edge-shade),
+    0 1px 0 #000,
+    0 16px 32px -8px rgba(0, 0, 0, 0.6);
+}
+/* margin line: a touch of ink bleed */
+.main::before {
+  box-shadow: 0 0 1px var(--margin);
+  opacity: 0.85;
+}
+
+/* masking tape */
+.follow-card,
+.start-card,
+.tip-card {
+  position: relative;
+}
+.follow-card::before,
+.start-card::before,
+.tip-card::before {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  width: 104px;
+  height: 24px;
+  margin-left: -52px;
+  background-color: var(--tape);
+  background-image: var(--tex-grain);
+  border-left: 1px dashed var(--tape-edge);
+  border-right: 1px dashed var(--tape-edge);
+  box-shadow: 0 1px 2px rgba(60, 50, 20, 0.12);
+  transform: rotate(-3deg);
+  clip-path: polygon(2% 0, 98% 4%, 100% 30%, 97% 52%, 100% 78%, 98% 100%, 3% 96%, 0 70%, 3% 48%, 0 22%);
+  pointer-events: none;
+}
+.tip-card::before {
+  left: auto;
+  right: -18px;
+  top: -6px;
+  width: 72px;
+  margin: 0;
+  transform: rotate(38deg);
+}
+
+/* the start card is a taped sheet, not a coloured tab */
+.start-card {
+  border-top: 0;
+  background-color: var(--card);
+  background-image: var(--tex-grain);
+  box-shadow:
+    0 1px 1px rgba(60, 50, 20, 0.1),
+    0 14px 22px -12px rgba(60, 50, 20, 0.35);
+}
+.start-card::before {
+  left: 64px;
+  margin: 0;
+  transform: rotate(-4deg);
+}
+
+/* sticky notes: paper grain, a slight curl at the bottom corner */
+.follow-card,
+.action {
+  background-color: var(--sticky);
+  background-image:
+    linear-gradient(135deg, transparent 78%, rgba(120, 95, 20, 0.07) 100%),
+    var(--tex-grain);
+}
+.follow-card {
+  border-radius: 1px 1px 2px 18px / 1px 1px 2px 6px;
+  box-shadow:
+    0 1px 1px rgba(60, 50, 20, 0.1),
+    0 16px 20px -14px rgba(60, 50, 20, 0.45);
+}
+.action {
+  box-shadow:
+    0 1px 1px rgba(60, 50, 20, 0.08),
+    0 6px 10px -8px rgba(60, 50, 20, 0.35);
+}
+
+/* the tip is a ruled index card */
+.tip-card {
+  background-color: #fdfdf8;
+  background-image:
+    linear-gradient(var(--index-head), var(--index-head)),
+    repeating-linear-gradient(transparent 0 23px, var(--index-rule) 23px 24px),
+    var(--tex-grain);
+  background-size: 100% 1.5px, 100% 100%, 220px 220px;
+  background-position: 0 34px, 0 36px, 0 0;
+  padding-top: 12px;
+  background-repeat: no-repeat, no-repeat, repeat;
+  box-shadow:
+    0 1px 1px rgba(60, 50, 20, 0.1),
+    0 12px 18px -12px rgba(60, 50, 20, 0.4);
+}
+:root[data-theme='dark'] .start-card {
+  background-color: var(--card-2);
+  box-shadow: 0 1px 0 #000, 0 14px 24px -12px rgba(0, 0, 0, 0.7);
+}
+:root[data-theme='dark'] .tip-card {
+  background-color: var(--card-2);
+}
+.tip-card .eyebrow {
+  line-height: 12px;
+  margin: 0 0 16px;
+  color: var(--ember);
+}
+.tip-card p:last-child {
+  line-height: 24px;
+}
+
+/* enhanced summary: a highlighter swipe on paper */
+.tldr {
+  background-color: var(--accent-soft);
+  background-image: var(--tex-grain);
+}
+
+/* the recording pill and primary buttons: a little sheen, like a pen barrel */
+.btn-primary,
+.btn-ember,
+.dock.live,
+.live-chip {
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 55%);
+}
+:root[data-theme='dark'] .btn-primary,
+:root[data-theme='dark'] .btn-ember {
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 60%);
+}
+
+/* the side panel is a loose sheet laid on top */
+.panel {
+  background-color: var(--card);
+  background-image: var(--tex-grain);
+  box-shadow: -10px 0 24px -18px rgba(60, 50, 20, 0.45);
+}
+
 /* ---------- responsive ---------- */
 @media (max-width: 1180px) {
   .home-grid {
@@ -2897,6 +3090,22 @@ textarea.title-input {
   }
   .fu-group h2 {
     flex-wrap: wrap;
+  }
+}
+
+/* phones: no punched holes (the margin sits where they would be) */
+@media (max-width: 900px) {
+  .main {
+    background-image: var(--tex-grain), var(--tex-fibre), radial-gradient(var(--dots) 0.8px, transparent 1px);
+    background-size: 220px 220px, 400px 400px, 28px 28px;
+    background-repeat: repeat;
+    box-shadow: inset 0 0 50px var(--edge-shade);
+  }
+  .start-card::before {
+    left: 40px;
+  }
+  .main {
+    overflow-x: clip;
   }
 }
 
