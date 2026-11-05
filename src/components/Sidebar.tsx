@@ -4,6 +4,7 @@ import { useRecorder } from '../lib/recorder'
 import { clock } from '../lib/util'
 import { useMeetings, useSettings } from '../store'
 import type { Route } from '../App'
+import { Logo } from './Logo'
 import { Orb } from './Orb'
 
 interface Props {
@@ -34,8 +35,7 @@ export function Sidebar({ route, open, onClose, onNew, onSettings, onPalette, go
       <aside className={`sidebar ${open ? 'open' : ''}`} aria-label="Navigation">
         <div className="brand">
           <button className="brand-mark" onClick={() => go('#/')} aria-label="Murmur home">
-            <span className="brand-dot" />
-            <span className="brand-word">murmur</span>
+            <Logo size={30} live={rec.status === 'recording'} />
           </button>
           <button className="icon-btn only-mobile" onClick={onClose} aria-label="Close menu">
             <X size={18} />

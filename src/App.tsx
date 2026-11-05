@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { CommandPalette } from './components/CommandPalette'
 import { FollowUpsPage } from './components/FollowUpsPage'
 import { Home } from './components/Home'
+import { Logo } from './components/Logo'
 import { NoteView } from './components/NoteView'
 import { NotesPage } from './components/NotesPage'
 import { SettingsModal } from './components/SettingsModal'
@@ -119,7 +120,7 @@ export default function App() {
               <button className="icon-btn" onClick={() => setNav(true)} aria-label="Open menu">
                 <Menu size={18} />
               </button>
-              <span className="brand-word">murmur</span>
+              <Logo size={26} />
             </div>
             {route.view === 'home' && <Home go={go} onStart={startNew} />}
             {route.view === 'notes' && <NotesPage go={go} onNew={() => newNote()} />}

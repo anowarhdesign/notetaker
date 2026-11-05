@@ -2862,6 +2862,39 @@ body::before {
   box-shadow: -10px 0 24px -18px rgba(60, 50, 20, 0.45);
 }
 
+/* ---------- logo: the rising m ---------- */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--ink);
+}
+.logo-mark {
+  flex: none;
+  display: block;
+}
+.logo-light {
+  fill: var(--ember);
+  transform-origin: 54px 58px;
+}
+.logo-mark.live .logo-light {
+  animation: logo-pulse 1.4s ease-in-out infinite;
+}
+@keyframes logo-pulse {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+.logo-word {
+  font: 800 24px/1 var(--sans);
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+.mobile-bar .logo-word {
+  font-size: 21px;
+}
+
 /* ---------- responsive ---------- */
 @media (max-width: 1180px) {
   .home-grid {
